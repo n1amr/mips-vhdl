@@ -1,12 +1,15 @@
-entity aluControl is 
-	port(	ALUOp : in bit_vector (1 DOWNTO 0);
-					Funct : in bit_vector (5 DOWNTO 0);
-					jr :out bit;
-					aluControl : out bit_vector(3 DOWNTO 0)
-			);
-end aluControl;
+library ieee;
+use ieee.std_logic_1164.all;
 
-architecture ALU_control of aluControl is
+entity ALUControl is
+	port(	ALUOp : in std_logic_vector (1 downto 0);
+				Funct : in std_logic_vector (5 downto 0);
+				jr :out std_logic;
+				aluControl : out std_logic_vector(3 downto 0)
+			);
+end ALUControl;
+
+architecture behave of ALUControl is
 begin
 	process(ALUOp ,Funct)
 	begin
@@ -36,4 +39,4 @@ begin
 			aluControl <= "0000" after 10ns;
 		end if;
 	end process;
-end ALU_control;
+end behave;

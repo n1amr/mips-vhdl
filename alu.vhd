@@ -3,15 +3,15 @@ use ieee.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
-entity alu is
-  port( a, b : in std_logic_vector( 31 DOWNTO 0);
-        alu_control : in bit_vector (3 DOWNTO 0);
-        shamt :in std_logic_vector ( 4 DOWNTO 0);
-        result : out std_logic_vector(31 DOWNTO 0);
-        zero : out bit );
-end alu;
+entity ALU is
+  port( a, b : in std_logic_vector( 31 downto 0);
+        alu_control : in std_logic_vector (3 downto 0);
+        shamt :in std_logic_vector ( 4 downto 0);
+        result : out std_logic_vector(31 downto 0);
+        zero : out std_logic );
+end ALU;
 
-architecture bev of alu is
+architecture bev of ALU is
   signal tmp : std_logic_vector(31 DOWNTO 0);
 begin
   process (a, b, alu_control, shamt)

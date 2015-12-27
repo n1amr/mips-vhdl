@@ -1,18 +1,20 @@
-entity signextend IS
-		  port (input : in bit_vector (15 downto 0); sign :IN bit ; output : out bit_vector (31 downto 0 ));
-	  end signextend ;
-	  architecture behave OF signextend IS
-	  begin 
-		  process (input , sign)
-		  begin
-			  if (sign = '0') then 
-				  output <= "0000000000000000" & input;
-			 else 
-			 output <= input (15) & input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) &input (15) & input ; 
-		 -- output <= (15 downto 0) => (input(15))  & input;  
-			 end if ;
-		  end process;
-		  end behave ;
-		  
-				   		
-									 			   	 
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity SignExtend is
+	port(	input_data : in std_logic_vector(15 downto 0);
+				SignExtend : in std_logic;
+				output_data : out std_logic_vector(31 downto 0)
+			);
+end SignExtend;
+architecture behave of SignExtend is
+begin
+	process (input_data, SignExtend)
+	begin
+		if(SignExtend = '0') then
+			output_data <= "0000000000000000" & input_data;
+		else
+			output_data <= (31 downto 16 => input_data (15)) & input_data;
+		end if;
+	end process;
+end behave;

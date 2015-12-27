@@ -1,17 +1,17 @@
 library IEEE;
-use IEEE.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
-use ieee.std_logic_textio.all;
-use std.textio.all;
+use IEEE.std_logic_1164.ALL;
+use IEEE.std_logic_unsigned.ALL;
+use IEEE.std_logic_textio.ALL;
+use std.textio.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity InstructionMemory is
   port( address : in std_logic_vector(31 downto 0);
-        read_data : out std_logic_vector(31 downto 0)
+        instruction : out std_logic_vector(31 downto 0)
       );
 end entity;
 
-architecture bev of InstructionMemory is
+architecture behave of InstructionMemory is
   type memory is array (0 to 255) of std_logic_vector(31 downto 0);
   
   --initialization function
@@ -36,6 +36,6 @@ begin
   
   process(address)
   begin
-      read_data <= mem(conv_integer(address) / 4) after 200ns;
+      instruction <= mem(conv_integer(address) / 4) after 200 ns;
   end process;
-end bev;
+end behave;

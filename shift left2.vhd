@@ -1,13 +1,16 @@
-entity shift_left2 is
-	port(	input_data :in bit_vector (31 downto 0);
-				output_data : out bit_vector (31 downto 0)
-			);
-end shift_left2;
+library ieee;
+use ieee.std_logic_1164.all;
 
-architecture behave of shift_left2 is
+entity ShiftLeft2 is
+	port(	input_data :in std_logic_vector (31 downto 0);
+				output_data : out std_logic_vector (31 downto 0)
+			);
+end ShiftLeft2;
+
+architecture behave of ShiftLeft2 is
 begin
 	process (input_data)
 	begin
-			output_data <= input_data sll 2;
+			output_data <= to_stdlogicvector(to_bitvector(input_data) sll 2);
 	end process;
 end behave;

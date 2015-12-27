@@ -14,7 +14,7 @@ entity DataMemory is
       );
 end entity;
 
-architecture bev of DataMemory is
+architecture behave of DataMemory is
   type memory is array (0 to 255) of std_logic_vector(7 downto 0);
   
   --initialization function
@@ -55,4 +55,4 @@ begin
       read_data(7 downto 0) <= mem(conv_integer(address) + 3) after 200ns;
     end if;
   end process;
-end bev;
+end behave;

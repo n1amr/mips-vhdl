@@ -1,27 +1,32 @@
-entity decoder is
-  port( instruction :IN bit_vector (31 downto 0 );
-        opcode : out bit_vector (5 downto 0);
-        rs : out bit_vector (4 downto 0);
-        rt : out bit_vector (4 downto 0);
-        rd : out bit_vector (4 downto 0);
-        shamt : out bit_vector (4 downto 0);
-        funct : out bit_vector (5 downto 0);
-        shift : out bit_vector (15 downto 0);
-        jump_address : out bit_vector (25 downto 0)
-      );
-end decoder;
+library ieee;
+use ieee.std_logic_1164.all;
+use IEEE.std_logic_unsigned.all;
+use IEEE.numeric_std.all;
 
-architecture behave of decoder is
+entity Decoder is
+  port( instruction :in std_logic_vector (31 downto 0);
+        opcode : out std_logic_vector (5 downto 0);
+        rs : out std_logic_vector (4 downto 0);
+        rt : out std_logic_vector (4 downto 0);
+        rd : out std_logic_vector (4 downto 0);
+        shamt : out std_logic_vector (4 downto 0);
+        funct : out std_logic_vector (5 downto 0);
+        shift : out std_logic_vector (15 downto 0);
+        jump_address : out std_logic_vector (25 downto 0)
+      );
+end Decoder;
+
+architecture behave of Decoder is
 begin
   process(instruction)
   begin
-    opcode <= instruction(31 downto 26) after 10ns;
-    rs <= instruction(25 downto 21) after 10ns;
-    rt <= instruction(20 downto 16) after 10ns;
-    rd <= instruction(15 downto 11) after 10ns;
-    shamt <= instruction(10 downto 6) after 10ns;
-    funct <= instruction(5 downto 0) after 10ns;
-    shift <= instruction(15 downto 0) after 10ns;
-    jump_address <= instruction(25 downto 0) after 10ns;
+    opcode <= instruction(31 downto 26) after 10 ns;
+    rs <= instruction(25 downto 21) after 10 ns;
+    rt <= instruction(20 downto 16) after 10 ns;
+    rd <= instruction(15 downto 11) after 10 ns;
+    shamt <= instruction(10 downto 6) after 10 ns;
+    funct <= instruction(5 downto 0) after 10 ns;
+    shift <= instruction(15 downto 0) after 10 ns;
+    jump_address <= instruction(25 downto 0) after 10 ns;
   end process;
 end behave;
