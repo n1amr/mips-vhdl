@@ -14,7 +14,7 @@ begin
   begin
     -- Rformat
     if (opcode = "000000") then
-      RegDst <= "01";
+      RegDst <= "01" after 10ns ;
       ALUSrc <= '0';
       MemtoReg <= "00";
       RegWrite <= '1';
