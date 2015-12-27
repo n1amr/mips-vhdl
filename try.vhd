@@ -166,7 +166,7 @@ begin
   not_jr <= not(jr);
   RegWrite_unless_jr <= RegWrite and not_jr;
 
-  mPC : PC port map (pc_signal, clk, next_pc);
+  mPC : PC port map (next_pc, clk, pc_signal);
   mAdder4: Adder4 port map (pc_signal);
   mInstructionMemory : InstructionMemory port map (pc_signal, instruction);
   mDecoder : Decoder port map(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
