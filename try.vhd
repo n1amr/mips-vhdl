@@ -8,6 +8,10 @@ end MIPSProcessor;
 
 architecture behave of MIPSProcessor is
 
+  component Clock is
+    port( clk : out std_logic);
+  end component;
+
   -- PC
   component PC is
   port( input_address : in std_logic_vector (31 downto 0 );
@@ -141,6 +145,7 @@ architecture behave of MIPSProcessor is
         );
   end component;
 
+  signal clk : std_logic;
   signal pc_signal, next_pc, pc_plus_4, sign_extended_shift, branch_offset : std_logic_vector (31 downto 0);
   signal instruction : std_logic_vector (31 downto 0);
   signal opcode,funct : std_logic_vector (5 downto 0);
@@ -154,7 +159,7 @@ architecture behave of MIPSProcessor is
   signal alu_control : std_logic_vector (3 downto 0);
   signal jump_mux_pc : std_logic_vector (31 downto 0);
   signal jump_pc : std_logic_vector (31 downto 0);
-  signal not_jr, jr, clk : std_logic;
+  signal not_jr, jr : std_logic;
   signal RegWrite_unless_jr : std_logic;
   signal take_branch : std_logic;
   signal branch_mux_pc : std_logic_vector (31 downto 0);
@@ -165,6 +170,8 @@ begin
   take_branch <= Branch and alu_zero;
   not_jr <= not(jr);
   RegWrite_unless_jr <= RegWrite and not_jr;
+
+  mClock : Clock port map (clk);
 
   mPC : PC port map (next_pc, clk, pc_signal);
   mAdder4: Adder4 port map (pc_signal, pc_plus_4);
