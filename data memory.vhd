@@ -3,51 +3,57 @@ use IEEE.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_textio.all;
 use std.textio.all;
-entity text_read is
+
+entity DataMemory is
   port( address : in std_logic_vector(31 downto 0);
         clk : in std_logic ;
-        datain: in std_logic_vector(31 downto 0);
-        wrtenb,readenb: in std_logic;
-        dataout : out std_logic_vector(31 downto 0)
+        write_data: in std_logic_vector(31 downto 0);
+        MemWrite, MemRead: in std_logic;
+        read_data : out std_logic_vector(31 downto 0)
       );
 end entity;
 
-architecture bev of text_read is
-  type mem is array (255 downto 0) of std_logic_vector(7 downto 0);
-  signal t_mem : mem;
+architecture bev of DataMemory is
+  type memory is array (0 to 255) of std_logic_vector(7 downto 0);
+  signal mem : memory;
 begin
-  process (clk , address )
+  process(clk)
   begin
-    if(clk' event and clk='1' and wrtenb='1') then
-      t_mem(conv_integer(address)+3) <= datain(31 downto 24);
-      t_mem(conv_integer(address)+2) <= datain(23 downto 16);
-      t_mem(conv_integer(address)+1) <= datain(15 downto 8);
-      t_mem(conv_integer(address)) <= datain(7 downto 0);
+    if(clk'event and clk = '1' and MemWrite = '1') then
+      mem(conv_integer(address)) <= write_data(31 downto 24);
+      mem(conv_integer(address) + 1) <= write_data(23 downto 16);
+      mem(conv_integer(address) + 2) <= write_data(15 downto 8);
+      mem(conv_integer(address) + 3) <= write_data(7 downto 0);
     end if;
   end process;
   
-  process(address)
-    FILE f : TEXT;
-    constant filename : string :="output.txt";
-    VARIABLE L : LINE;
-    variable i : integer:=0;
-    variable b : std_logic_vector(7 downto 0);
+  process(MemRead, address)
   begin
-    File_Open (f,FILENAME, read_mode);
-    while ((i<=15) and (not EndFile (f))) loop
-      readline (f, l);
-      next when l(1) = '#';
-      read(l, b);
-      t_mem(i) <= b;
-      i := i + 1;
-    end loop;
-    
-    File_Close (f);
-    if (readenb='1') then
-      dataout(31 downto 24) <= t_mem(conv_integer(address)+3);
-      dataout(23 downto 16) <= t_mem(conv_integer(address)+2);
-      dataout(15 downto 8)<= t_mem(conv_integer(address)+1);
-      dataout(7 downto 0) <= t_mem(conv_integer(address));
+    if(MemRead = '1') then
+      read_data(31 downto 24) <= mem(conv_integer(address));
+      read_data(23 downto 16) <= mem(conv_integer(address) + 1);
+      read_data(15 downto 8) <= mem(conv_integer(address) + 2);
+      read_data(7 downto 0) <= mem(conv_integer(address) + 3);
     end if;
   end process;
+
+  --process
+  --  constant FILENAME : string :="data-memory.mem";
+  --  FILE mFile : TEXT;
+  --  variable i : integer := 0;
+  --  variable mLIne : LINE;
+  --  variable mByte : std_logic_vector(7 downto 0);
+  --begin
+  --  File_Open(mFile, FILENAME, read_mode);
+  --  while( (i <= 15) and (not EndFile(mFile))) loop
+  --    readline (mFile, mLIne);
+  --    next when mLIne(1) = '#';
+  --    read(mLIne, mByte);
+  --    mem(i) <= mByte;
+  --    i := i + 1;
+  --  end loop;
+    
+  --  File_Close(mFile);
+  --  wait;
+  --end process;
 end bev;
