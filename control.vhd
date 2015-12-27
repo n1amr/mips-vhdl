@@ -82,7 +82,7 @@ begin
     end if;
 
     -- beq
-    if (opcode = "000100") then
+    if (opcode = "000101") then
       RegDst <= "XX" after 10 ns;
       ALUSrc <= '0' after 10 ns;
       MemtoReg <= "XX" after 10 ns;
