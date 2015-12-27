@@ -1,36 +1,41 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use IEEE.numeric_std.all;
 use ieee.std_logic_textio.all;
 use std.textio.all;
+use IEEE.STD_LOGIC_ARITH.ALL;
 
-entity instructionMemory is
-  port( read_address : in std_logic_vector(7 downto 0);
-        instruction : out std_logic_vector(31 downto 0)
+entity InstructionMemory is
+  port( address : in std_logic_vector(31 downto 0);
+        read_data : out std_logic_vector(31 downto 0)
       );
-end instructionMemory;
+end entity;
 
-architecture bev of instructionMemory is
-  type mem is array (255 downto 0) of std_logic_vector(31 downto 0);
-  signal t_mem : mem;
-begin
-  process(read_address)
-    FILE f : TEXT;
-    constant filename : string :="output.txt";
-    VARIABLE L : LINE;
-    variable i : integer:=0;
-    variable b : std_logic_vector(31 downto 0);
+architecture bev of InstructionMemory is
+  type memory is array (0 to 255) of std_logic_vector(31 downto 0);
+  
+  --initialization function
+  impure function readmemb(filename : in string) return memory is
+    file mFile : text is in filename;
+    variable mLine : line;
+    variable ret_mem : memory;
+    variable i : integer := 0;
   begin
-    File_Open (f,FILENAME, read_mode)ك
-    while ((i<=255) and (not EndFile (f))) loop
-    readline (f, l);
-    next when l(1) = '#'; 
-    read(l, b);
-    t_mem(i) <= b;
-    i := i + 1;
+    while( (i < 256) and (not EndFile(mFile))) loop
+      readline (mFile, mLIne);
+      next when mLIne(1) = '#'; -- skip comments
+      read(mLine, ret_mem(i));
+      i := i + 1;
     end loop;
-    File_Close (f);
-    instruction<=t_mem(conv_integer(read_address));
+
+    return ret_mem;
+  end function;
+
+  signal mem : memory := readmemb("instruction-memory.mem");
+begin
+  
+  process(address)
+  begin
+      read_data <= mem(conv_integer(address) / 4);
   end process;
 end bev;
