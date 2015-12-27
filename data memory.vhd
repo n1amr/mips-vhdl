@@ -3,6 +3,7 @@ use IEEE.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_textio.all;
 use std.textio.all;
+use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity DataMemory is
   port( address : in std_logic_vector(31 downto 0);
@@ -15,7 +16,25 @@ end entity;
 
 architecture bev of DataMemory is
   type memory is array (0 to 255) of std_logic_vector(7 downto 0);
-  signal mem : memory;
+  
+  --initialization function
+  impure function readmemb(filename : in string) return memory is
+    file mFile : text is in filename;
+    variable mLine : line;
+    variable ret_mem : memory;
+    variable i : integer := 0;
+  begin
+    while( (i < 256) and (not EndFile(mFile))) loop
+      readline (mFile, mLIne);
+      next when mLIne(1) = '#'; -- skip comments
+      read(mLine, ret_mem(i));
+      i := i + 1;
+    end loop;
+
+    return ret_mem;
+  end function;
+
+  signal mem : memory := readmemb("data-memory.mem");
 begin
   process(clk)
   begin
@@ -36,24 +55,4 @@ begin
       read_data(7 downto 0) <= mem(conv_integer(address) + 3);
     end if;
   end process;
-
-  --process
-  --  constant FILENAME : string :="data-memory.mem";
-  --  FILE mFile : TEXT;
-  --  variable i : integer := 0;
-  --  variable mLIne : LINE;
-  --  variable mByte : std_logic_vector(7 downto 0);
-  --begin
-  --  File_Open(mFile, FILENAME, read_mode);
-  --  while( (i <= 15) and (not EndFile(mFile))) loop
-  --    readline (mFile, mLIne);
-  --    next when mLIne(1) = '#';
-  --    read(mLIne, mByte);
-  --    mem(i) <= mByte;
-  --    i := i + 1;
-  --  end loop;
-    
-  --  File_Close(mFile);
-  --  wait;
-  --end process;
 end bev;
