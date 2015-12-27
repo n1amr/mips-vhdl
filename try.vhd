@@ -167,7 +167,7 @@ begin
   RegWrite_unless_jr <= RegWrite and not_jr;
 
   mPC : PC port map (next_pc, clk, pc_signal);
-  mAdder4: Adder4 port map (pc_signal);
+  mAdder4: Adder4 port map (pc_signal, pc_plus_4);
   mInstructionMemory : InstructionMemory port map (pc_signal, instruction);
   mDecoder : Decoder port map(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
   mControl : Control port map (opcode, Branch, MemRead, MemWrite, ALUSrc, RegWrite, sign_extend_signal, Jump, ALUOp, RegDst, MemtoReg);
