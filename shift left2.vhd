@@ -4,12 +4,10 @@ entity shift_left2 is
 			);
 end shift_left2;
 
-architecture behave of shift_left2 is	  
+architecture behave of shift_left2 is
 begin
 	process (input_data)
 	begin
 			output_data <= input_data sll 2;
 	end process;
 end behave;
-	  
-	
