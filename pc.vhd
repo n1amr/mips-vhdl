@@ -11,7 +11,7 @@ end pc;
 
 architecture PC of pc is 
 begin
-  process (clk) 
+  process (clk)
   begin
     if clk ='1' and clk'event then
       output <= input after 10 ns;

@@ -12,7 +12,7 @@ architecture behave of adder is
 begin
   process(a, b)
   begin
-    result <= a + b;
+    result <= a + b after 50ns;
   end process;
 end behave;
 

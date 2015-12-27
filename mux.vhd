@@ -16,11 +16,11 @@ begin
   process(I3, I2 ,I1 ,I0 , selector)
   begin
     case selector is
-      when "00"   =>  O <= I0;
-      when "01"   =>  O <= I1;
-      when "10"   =>  O <= I2;
-      when "11"   =>  O <= I3;
-      when others =>  O <= "ZZZZZ";
+      when "00"   =>  O <= I0 after 10ns;
+      when "01"   =>  O <= I1 after 10ns;
+      when "10"   =>  O <= I2 after 10ns;
+      when "11"   =>  O <= I3 after 10ns;
+      when others =>  O <= "ZZZZZ" after 10ns;
     end case;
   end process;
 end behave;
@@ -43,11 +43,11 @@ begin
   process(I3, I2 ,I1 ,I0 , selector)
   begin
     case selector is
-      when "00"   =>  O <= I0;
-      when "01"   =>  O <= I1;
-      when "10"   =>  O <= I2;
-      when "11"   =>  O <= I3;
-      when others =>  O <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+      when "00"   =>  O <= I0 after 10ns;
+      when "01"   =>  O <= I1 after 10ns;
+      when "10"   =>  O <= I2 after 10ns;
+      when "11"   =>  O <= I3 after 10ns;
+      when others =>  O <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ" after 10ns;
     end case;
   end process;
 end behave;
@@ -68,9 +68,9 @@ begin
   process(I1 ,I0 , selector)
   begin
     case selector is
-      when '0'   =>  O <= I0;
-      when '1'   =>  O <= I1;
-      when others =>  O <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+      when '0'   =>  O <= I0 after 10ns;
+      when '1'   =>  O <= I1 after 10ns;
+      when others =>  O <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ" after 10ns;
     end case;
   end process;
 end behave;

@@ -14,14 +14,14 @@ architecture behave OF RegisterFile IS
 	type registers_array is array (0 to 31) of std_logic_vector(31 downto 0);
 	signal registers : registers_array := (others => "00000000000000000000000000000000");
 begin
-	read_data1 <= registers ( to_integer (unsigned (read_reg1))); 
-	read_data2 <= registers ( to_integer (unsigned (read_reg2)));
+	read_data1 <= registers ( to_integer (unsigned (read_reg1))) after 100ns;
+	read_data2 <= registers ( to_integer (unsigned (read_reg2))) after 100ns;
 
 	process (cllk)
 	begin
 		if (cllk'event and cllk = '1') then
 			if ((RegWrite = '1') and (write_reg /= "00000")) then
-				registers(to_integer(unsigned(write_reg))) <= write_data;
+				registers(to_integer(unsigned(write_reg))) <= write_data after 100ns;
 			end if;
 		end if;
 	end process;

@@ -36,6 +36,6 @@ begin
   
   process(address)
   begin
-      read_data <= mem(conv_integer(address) / 4);
+      read_data <= mem(conv_integer(address) / 4) after 200ns;
   end process;
 end bev;

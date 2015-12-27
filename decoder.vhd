@@ -15,13 +15,13 @@ architecture behave of decoder is
 begin
   process(instruction)
   begin
-    opcode <= instruction(31 downto 26);
-    rs <= instruction(25 downto 21);
-    rt <= instruction(20 downto 16);
-    rd <= instruction(15 downto 11);
-    shamt <= instruction(10 downto 6);
-    funct <= instruction(5 downto 0);
-    shift <= instruction(15 downto 0);
-    jump_address <= instruction(25 downto 0);
+    opcode <= instruction(31 downto 26) after 10ns;
+    rs <= instruction(25 downto 21) after 10ns;
+    rt <= instruction(20 downto 16) after 10ns;
+    rd <= instruction(15 downto 11) after 10ns;
+    shamt <= instruction(10 downto 6) after 10ns;
+    funct <= instruction(5 downto 0) after 10ns;
+    shift <= instruction(15 downto 0) after 10ns;
+    jump_address <= instruction(25 downto 0) after 10ns;
   end process;
 end behave;

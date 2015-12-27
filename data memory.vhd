@@ -39,20 +39,20 @@ begin
   process(clk)
   begin
     if(clk'event and clk = '1' and MemWrite = '1') then
-      mem(conv_integer(address)) <= write_data(31 downto 24);
-      mem(conv_integer(address) + 1) <= write_data(23 downto 16);
-      mem(conv_integer(address) + 2) <= write_data(15 downto 8);
-      mem(conv_integer(address) + 3) <= write_data(7 downto 0);
+      mem(conv_integer(address)) <= write_data(31 downto 24) after 100ns;
+      mem(conv_integer(address) + 1) <= write_data(23 downto 16) after 100ns;
+      mem(conv_integer(address) + 2) <= write_data(15 downto 8) after 100ns;
+      mem(conv_integer(address) + 3) <= write_data(7 downto 0) after 100ns;
     end if;
   end process;
   
   process(MemRead, address)
   begin
     if(MemRead = '1') then
-      read_data(31 downto 24) <= mem(conv_integer(address));
-      read_data(23 downto 16) <= mem(conv_integer(address) + 1);
-      read_data(15 downto 8) <= mem(conv_integer(address) + 2);
-      read_data(7 downto 0) <= mem(conv_integer(address) + 3);
+      read_data(31 downto 24) <= mem(conv_integer(address)) after 200ns;
+      read_data(23 downto 16) <= mem(conv_integer(address) + 1) after 200ns;
+      read_data(15 downto 8) <= mem(conv_integer(address) + 2) after 200ns;
+      read_data(7 downto 0) <= mem(conv_integer(address) + 3) after 200ns;
     end if;
   end process;
 end bev;
