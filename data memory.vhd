@@ -3,56 +3,56 @@ use IEEE.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_textio.all;
 use std.textio.all;
-entity text_read is
-    port(address : in std_logic_vector(31 downto 0);
-	clk : in std_logic ;
-	datain: in std_logic_vector(31 downto 0); 
-    wrtenb,readenb: in std_logic; 
+use IEEE.STD_LOGIC_ARITH.ALL;
 
-	dataout : out std_logic_vector(31 downto 0)
-	);
-    end entity;
-    architecture bev of text_read is
-        type mem is array (255 downto 0) of std_logic_vector(7 downto 0);
-        signal t_mem : mem;
-        begin
-        	process (clk , address )
-		 begin
-		 if (clk' event and clk='1' and wrtenb='1') then 
-  	t_mem(conv_integer(address)+3) <= datain(31 downto 24); 
-		t_mem(conv_integer(address)+2) <= datain(23 downto 16); 
-		t_mem(conv_integer(address)+1) <= datain(15 downto 8); 
-		t_mem(conv_integer(address)) <= datain(7 downto 0); 
+entity DataMemory is
+  port( address : in std_logic_vector(31 downto 0);
+        clk : in std_logic ;
+        write_data: in std_logic_vector(31 downto 0);
+        MemWrite, MemRead: in std_logic;
+        read_data : out std_logic_vector(31 downto 0)
+      );
+end entity;
 
-		 end if;
-		 end process ;
-			process(address)
-                FILE f : TEXT;
-                constant filename : string :="output.txt";
-                VARIABLE L : LINE;
-                variable i : integer:=0;
-                variable b : std_logic_vector(7 downto 0);
-                begin
-                    
-                    File_Open (f,FILENAME, read_mode);	
-			while ((i<=15) and (not EndFile (f))) loop
-			readline (f, l);
-			next when l(1) = '#'; 
-			read(l, b);
-			t_mem(i) <= b;
-			i := i + 1;
-		end loop;
-		File_Close (f); 
-		if (readenb='1')then 
-			dataout(31 downto 24) <= t_mem(conv_integer(address)+3); 
-			dataout(23 downto 16) <= t_mem(conv_integer(address)+2); 
-			dataout(15 downto 8)<= t_mem(conv_integer(address)+1);
-			dataout(15 downto 8) <= t_mem(conv_integer(address));
-		
-		--dataout(7 downto 0) <= b(7 downto 0); 
-        end if; 								
-	
+architecture bev of DataMemory is
+  type memory is array (0 to 255) of std_logic_vector(7 downto 0);
+  
+  --initialization function
+  impure function readmemb(filename : in string) return memory is
+    file mFile : text is in filename;
+    variable mLine : line;
+    variable ret_mem : memory;
+    variable i : integer := 0;
+  begin
+    while( (i < 256) and (not EndFile(mFile))) loop
+      readline (mFile, mLIne);
+      next when mLIne(1) = '#'; -- skip comments
+      read(mLine, ret_mem(i));
+      i := i + 1;
+    end loop;
 
-		 end process;  
-		 
-        end bev;
+    return ret_mem;
+  end function;
+
+  signal mem : memory := readmemb("data-memory.mem");
+begin
+  process(clk)
+  begin
+    if(clk'event and clk = '1' and MemWrite = '1') then
+      mem(conv_integer(address)) <= write_data(31 downto 24);
+      mem(conv_integer(address) + 1) <= write_data(23 downto 16);
+      mem(conv_integer(address) + 2) <= write_data(15 downto 8);
+      mem(conv_integer(address) + 3) <= write_data(7 downto 0);
+    end if;
+  end process;
+  
+  process(MemRead, address)
+  begin
+    if(MemRead = '1') then
+      read_data(31 downto 24) <= mem(conv_integer(address));
+      read_data(23 downto 16) <= mem(conv_integer(address) + 1);
+      read_data(15 downto 8) <= mem(conv_integer(address) + 2);
+      read_data(7 downto 0) <= mem(conv_integer(address) + 3);
+    end if;
+  end process;
+end bev;
