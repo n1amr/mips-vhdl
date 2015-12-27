@@ -12,18 +12,17 @@ end RegisterFile ;
 
 architecture behave OF RegisterFile IS
 	type registers_array is array (0 to 31) of std_logic_vector(31 downto 0);
-	signal registers : registers_array;
-	begin
-		registers(0) <= "00000000000000000000000000000000";
-		read_data1 <= registers ( to_integer (unsigned (read_reg1))); 
-		read_data2 <= registers ( to_integer (unsigned (read_reg2)));
+	signal registers : registers_array := (others => "00000000000000000000000000000000");
+begin
+	read_data1 <= registers ( to_integer (unsigned (read_reg1))); 
+	read_data2 <= registers ( to_integer (unsigned (read_reg2)));
 
-		process (cllk)
-		begin
-			IF (cllk'event and cllk = '1') then
-				if ((RegWrite = '1') and (write_reg /= "00000")) then
-					registers ( to_integer (unsigned (write_reg))) <= write_data;
-				end if;
-			END IF;
-	end process; 
+	process (cllk)
+	begin
+		if (cllk'event and cllk = '1') then
+			if ((RegWrite = '1') and (write_reg /= "00000")) then
+				registers(to_integer(unsigned(write_reg))) <= write_data;
+			end if;
+		end if;
+	end process;
 end behave;
