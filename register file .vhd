@@ -1,6 +1,6 @@
 library IEEE;
-use IEEE.std_logic_1164.ALL ;
-use ieee.numeric_std.all;
+use IEEE.std_logic_1164.ALL;
+use IEEE.numeric_std.ALL;
 
 entity RegisterFile is
 	port (	read_reg1, read_reg2, write_reg : in std_logic_vector(4 downto 0);
